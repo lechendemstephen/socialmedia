@@ -1,15 +1,40 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.contrib import auth 
 from django.contrib.auth.decorators import login_required
 from .models import Profile
+from upload_post.models import Post
 # Create your views here.
+
+user = get_user_model()
 
 @login_required(login_url='signin')
 def index(request): 
+    user_object = User.objects.get(username=request.user.username)
+    user_profile= Profile.objects.get(user=user_object)
+    post = Post.objects.all()
 
-    return render(request, 'pages/index.html' )
+    if request.method == "POST": 
+            image = request.FILES.get('image')
+            caption = request.POST['caption']
+            new_post = Post.objects.create (
+                user = request.user.username, 
+                img = image, 
+                caption = caption
+            )
+
+            new_post.save()
+            messages.success(request, 'post successfully')
+            return redirect('index')
+
+    context = {
+        "user_profile": user_profile,
+        "posts": post, 
+    }
+
+    return render(request, 'pages/index.html', context)
 
 @login_required(login_url='signin')
 def settings(request): 
