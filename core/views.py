@@ -1,11 +1,11 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 from django.contrib import auth 
 from django.contrib.auth.decorators import login_required
 from .models import Profile
-from upload_post.models import Post
+from upload_post.models import Post, LikePost
 # Create your views here.
 
 user = get_user_model()
@@ -13,7 +13,7 @@ user = get_user_model()
 @login_required(login_url='signin')
 def index(request): 
     user_object = User.objects.get(username=request.user.username)
-    user_profile= Profile.objects.get(user=user_object)
+    user_profile= Profile.objects.get_or_create(user=user_object)
     post = Post.objects.all()
 
     if request.method == "POST": 
@@ -142,3 +142,38 @@ def logout(request):
     auth.logout(request)
 
     return redirect('signin')
+
+
+# liking and unliking post functionality
+def like_post(request, post_id): 
+    post = get_object_or_404(Post, id=post_id)
+    liked, created = LikePost.objects.get_or_create(post=post, user=request.user)
+    # checking if the post is just liked or was already liked
+    if created: 
+        post.no_of_likes = post.no_of_likes + 1 
+        post.save()
+        messages.success(request, 'successfully liked')
+        return redirect('index')
+    if liked: 
+        post.no_of_likes = post.no_of_likes - 1 
+        liked.delete()
+        messages.success(request, 'successfully unliked')
+        return redirect('index')
+    
+    context = {
+            'likes': post.no_of_likes,
+        }
+
+
+    return render(request, 'pages/index.html', context)
+
+
+
+    
+   
+   
+    
+
+
+
+

@@ -8,5 +8,6 @@ urlpatterns = [
 
 
     path('settings/', views.settings, name='settings'),
+    path('<int:post_id>/', views.like_post, name='like_post'),
 
 ]
