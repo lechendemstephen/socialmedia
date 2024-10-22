@@ -157,6 +157,7 @@ def like_post(request, post_id):
     if liked: 
         post.no_of_likes = post.no_of_likes - 1 
         liked.delete()
+        post.save()
         messages.success(request, 'successfully unliked')
         return redirect('index')
     
