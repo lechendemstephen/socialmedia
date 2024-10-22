@@ -17,17 +17,18 @@ def index(request):
     post = Post.objects.all()
 
     if request.method == "POST": 
-            image = request.FILES.get('image')
-            caption = request.POST['caption']
-            new_post = Post.objects.create (
-                user = request.user.username, 
-                img = image, 
-                caption = caption
-            )
+            if 'pic_upload' in request.POST: 
+                image = request.FILES.get('image')
+                caption = request.POST['caption']
+                new_post = Post.objects.create (
+                    user = request.user.username, 
+                    img = image, 
+                    caption = caption
+                )
 
-            new_post.save()
-            messages.success(request, 'post successfully')
-            return redirect('index')
+                new_post.save()
+                messages.success(request, 'post successfully')
+                return redirect('index')
 
     context = {
         "user_profile": user_profile,

@@ -83,7 +83,7 @@
                                                     <input type="file" name="image">
                                                     <textarea name="caption" id="" class="button soft-warning small" placeholder="caption..."></textarea>
                                                     <br> 
-                                                    <button class=" button bg-blue-700" type="submit">Upload</button>  
+                                                    <button class=" button bg-blue-700" type="submit" name="pic_upload">Upload</button>  
                                                 </div>
                                    </form>
                                   
@@ -325,14 +325,17 @@
                                         </div>
                                     </div>
                                 </div>
-
+                            <form action="" method="POST">
+                                {% csrf_token %}
+                               
                                 <div class="bg-gray-100 bg-gray-100 rounded-full rounded-md relative ">
-                                    <input type="text" placeholder="post a comment" class="bg-transparent max-h-10 shadow-none">
+                                    <input type="text" placeholder="post a comment" class="bg-transparent max-h-10 shadow-none" name="comment">
                                     <div class="absolute bottom-0 flex h-full items-center right-0 right-3 text-xl space-x-2">
-                                        <a href="#"> <i class="uil-image"></i></a>
-                                        <a href="#"> <i class="uil-video"></i></a>
+                                    <a href="{% url 'comment' post.id %}"><button name="comment_form" type="submit" style="background-color: blue; color: white; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer;">post</button> </a> 
                                     </div>
                                 </div>
+                               
+                            </form>
     
                             </div>
     
