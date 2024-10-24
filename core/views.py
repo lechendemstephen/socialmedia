@@ -6,6 +6,8 @@ from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from .models import Profile
 from upload_post.models import Post, LikePost
+from Comments.models import Comments 
+
 # Create your views here.
 
 user = get_user_model()
@@ -14,6 +16,8 @@ user = get_user_model()
 def index(request): 
     user_object = User.objects.get(username=request.user.username)
     user_profile= Profile.objects.get_or_create(user=user_object)
+    comments = Comments.objects.all()
+
     post = Post.objects.all()
 
     if request.method == "POST": 
@@ -33,6 +37,7 @@ def index(request):
     context = {
         "user_profile": user_profile,
         "posts": post, 
+        "comments": comments
     }
 
     return render(request, 'pages/index.html', context)

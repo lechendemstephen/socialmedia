@@ -1,0 +1,14 @@
+{% include "includes/alert.html" %}
+<form action="" method="POST">
+    {% csrf_token %}
+      <div class="bg-gray-100 bg-gray-100 rounded-full rounded-md relative ">
+          <input type="text" placeholder="post a comment" class="bg-transparent max-h-10 shadow-none" name="comment">
+          <a href="{% url 'comment' post.id %}">
+          <div class="absolute bottom-0 flex h-full items-center right-0 right-3 text-xl space-x-2">
+          <button  type="submit" style="background-color: blue; color: white; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer;" name="comment_form">Comment</button> 
+          </div>
+      </a> 
+         
+      </div>
+      
+    </form>

@@ -18,3 +18,13 @@ class Comments(models.Model):
 
     class Meta: 
         verbose_name_plural = 'Comments'
+
+
+class TestComment(models.Model): 
+    comment = models.CharField(max_length=200)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+
+    def __str__(self): 
+
+        return self.comment
