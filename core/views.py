@@ -10,12 +10,10 @@ from Comments.models import Comments
 
 # Create your views here.
 
-user = get_user_model()
 
 @login_required(login_url='signin')
 def index(request): 
-    user_object = User.objects.get(username=request.user.username)
-    user_profile= Profile.objects.get_or_create(user=user_object)
+    user_profile= Profile.objects.get(user=request.user)
     comments = Comments.objects.all()
 
     post = Post.objects.all()
@@ -175,10 +173,30 @@ def like_post(request, post_id):
     return render(request, 'pages/index.html', context)
 
 
+# user profile 
+def user_profile(request, username): 
+    user_profile= Profile.objects.get(user=request.user)
+    post = Post.objects.filter(user=request.user.username)
+    
+  
 
     
-   
-   
+
+
+
+
+
+
+    context = {
+        "user": user_profile, 
+        "posts": post, 
+        "no_post":  post.count()
+        
+    }
+
+
+
+    return render(request, 'pages/profile.html', context)
     
 
 
