@@ -9,11 +9,16 @@ from upload_post.models import Post, LikePost
 from Comments.models import Comments 
 
 # Create your views here.
+user = get_user_model()
 
+try: 
+      user_profile= Profile.objects.get(user=user.username)
+except:
+        ...
 
 @login_required(login_url='signin')
 def index(request): 
-    user_profile= Profile.objects.get(user=request.user)
+        
     comments = Comments.objects.all()
 
     post = Post.objects.all()
@@ -35,14 +40,16 @@ def index(request):
     context = {
         "user_profile": user_profile,
         "posts": post, 
-        "comments": comments
+        "comments": comments,
+       
     }
 
     return render(request, 'pages/index.html', context)
 
 @login_required(login_url='signin')
 def settings(request): 
-    user_profile = Profile.objects.get(user=request.user)
+   
+    user_profile = Profile.objects.get(user=request.user.username)
 
     if request.method == "POST": 
 
@@ -51,6 +58,7 @@ def settings(request):
             bio = request.POST['bio']
             location = request.POST['location']
 
+            user_profile.user = user.username
             user_profile.profileimg = image
             user_profile.bio = bio 
             user_profile.location = location 
@@ -110,7 +118,7 @@ def signup(request):
                 user_model = User.objects.get(username=username)
 
                 new_profile = Profile.objects.create(
-                    user = user_model, 
+                    user = user_model.username, 
                 )
                 new_profile.save() 
                 return redirect('settings')
@@ -174,9 +182,9 @@ def like_post(request, post_id):
 
 
 # user profile 
-def user_profile(request, username): 
-    user_profile= Profile.objects.get(user=request.user)
-    post = Post.objects.filter(user=request.user.username)
+def user_profile(request): 
+    user_profile= Profile.objects.get(user=user.username)
+    post = Post.objects.filter(user=user.username)
     
   
 
