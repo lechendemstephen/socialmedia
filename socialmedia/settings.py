@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'core', 
     'upload_post',
     'Comments',
+    'followers',
 ]
 
 MIDDLEWARE = [

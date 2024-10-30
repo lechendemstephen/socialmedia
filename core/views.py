@@ -11,16 +11,14 @@ from Comments.models import Comments
 # Create your views here.
 user = get_user_model()
 
-try: 
-      user_profile= Profile.objects.get(user=user.username)
-except:
-        ...
 
 @login_required(login_url='signin')
 def index(request): 
-        
+    
+    user_profile= Profile.objects.get(user=request.user.username)
     comments = Comments.objects.all()
-
+    available_users = User.objects.all()
+   
     post = Post.objects.all()
 
     if request.method == "POST": 
@@ -28,6 +26,7 @@ def index(request):
                 image = request.FILES.get('image')
                 caption = request.POST['caption']
                 new_post = Post.objects.create (
+                    owner = request.user,
                     user = request.user.username, 
                     img = image, 
                     caption = caption
@@ -41,6 +40,7 @@ def index(request):
         "user_profile": user_profile,
         "posts": post, 
         "comments": comments,
+        "avaiable_users": available_users,
        
     }
 
@@ -48,9 +48,9 @@ def index(request):
 
 @login_required(login_url='signin')
 def settings(request): 
-   
-    user_profile = Profile.objects.get(user=request.user.username)
 
+    user_profile = Profile.objects.get(user=request.user.username)
+   
     if request.method == "POST": 
 
         if request.FILES.get('image') == None: 
@@ -183,16 +183,9 @@ def like_post(request, post_id):
 
 # user profile 
 def user_profile(request): 
-    user_profile= Profile.objects.get(user=user.username)
-    post = Post.objects.filter(user=user.username)
+    user_profile= Profile.objects.get(user=request.user)
+    post = Post.objects.filter(user=request.user)
     
-  
-
-    
-
-
-
-
 
 
     context = {

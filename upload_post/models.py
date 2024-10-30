@@ -8,6 +8,7 @@ User = get_user_model()
 
 # Create your models here.
 class Post(models.Model): 
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     user = models.CharField(max_length=100)
     img  = models.ImageField(upload_to='profile_images/', blank=True)
     caption = models.TextField(blank=True, max_length=150)
